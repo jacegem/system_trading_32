@@ -1,5 +1,7 @@
-import sys, time
+import sys
+
 from PyQt5.QtWidgets import QApplication
+
 from .control import Control
 
 
@@ -9,5 +11,10 @@ class Kiwoom:
         self.control = Control()
         pass
 
-    def login(self):
+    def get_login_info(self):
+        info = self.control.get_login_info('ACCOUNT_CNT')
+        print(info)
         pass
+
+    def do(self):
+        self.get_login_info()

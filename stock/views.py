@@ -10,6 +10,6 @@ def index(request):
 
 def kiwoom(request):
     kiwoom = Kiwoom()
-    kiwoom.login()
+    kiwoom.do()
 
     return JsonResponse({'result': 'index'})
