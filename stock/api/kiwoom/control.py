@@ -1,5 +1,3 @@
-import time
-
 from PyQt5.QAxContainer import QAxWidget
 from PyQt5.QtCore import QEventLoop
 
@@ -8,8 +6,6 @@ class Control(QAxWidget):
     def __init__(self):
         super().__init__()
         self.setControl("KHOPENAPI.KHOpenAPICtrl.1")
-
-        self.loginLoop = None
 
         # while self.dynamicCall("GetConnectState()") == 0:
         #     self.comm_connect()
@@ -21,12 +17,19 @@ class Control(QAxWidget):
         else:
             print("Connected")
 
-    def commConnect(self):
-        ret = self.dynamicCall("CommConnect()")
-        self.loginLoop = QEventLoop()
-        self.loginLoop.exec_()
+        self.event_loop = None
 
-    def getLoginInfo(self, tag):
+        self.OnEventConnect.connect(self.event_connect)
+
+    def comm_connect(self):
+        ret = self.dynamicCall("CommConnect()")
+        self.event_loop = QEventLoop()
+        self.event_loop.exec_()
+
+    def event_connect(self, returnCode):
+        print("event_connect", returnCode)
+
+    def get_login_info(self, tag):
         """
         사용자의 tag에 해당하는 정보를 반환한다.
         tag에 올 수 있는 값은 아래와 같다.
