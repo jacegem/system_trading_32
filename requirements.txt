@@ -1,0 +1,8 @@
+django
+twisted
+slacker
+celery==3.1.25    # https://stackoverflow.com/questions/40540769/importerror-no-module-named-timeutils
+django-celery
+redis
+pyqt5
+pyqt5-tools
