@@ -142,6 +142,12 @@ class Control(QAxWidget):
             "screenNo, requestName, trCode, recordName, inquiry, deprecated1, deprecated2, deprecated3, deprecated4 : {0:5} {1:10} {2:5} {3:3}".format(
                 screen_no, request_name, tr_code, record_name, inquiry, deprecated1, deprecated2, deprecated3,
                 deprecated4))
+
+        if self.request_loop:
+            self.request_loop.exit()
+
+        pass
+
         # 주문번호와 주문루프
         self.order_no = self.get_comm_data(tr_code, request_name, 0, "주문번호")
 
