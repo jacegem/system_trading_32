@@ -3,6 +3,7 @@
 국내 증권거래 API 사용을 위해 32bit를 사용합니다.
 
 
-## CamelCase
+## 참고
 
-[CamelCasePlugin](https://goo.gl/wBpSDf) 을 설치하여 CamelCase를 사용합니다.
+- https://github.com/yoonsungwon/openapi-py/blob/master/Kiwoom.py
+- http://psps.tistory.com/5
