@@ -37,9 +37,9 @@ class Kiwoom:
         # self.control.set_input_value("종목코드", "185490")
         # self.control.comm_rq_data("주식기본정보", "OPT10001", 0, "0101")
         print("END DO")
-        if Kiwoom.app:
-            QApplication.quit()
-            Kiwoom.app = None
+        # if Kiwoom.app:
+        #     QApplication.quit()
+        #     Kiwoom.app = None
 
     def inquiry_balance(self):
         # 예수금상세현황요청
