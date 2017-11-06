@@ -300,3 +300,4 @@ class Control(QAxWidget):
 
         count = self.dynamicCall("GetRepeatCnt(QString, QString)", tr_code, request_name)
         return count
+

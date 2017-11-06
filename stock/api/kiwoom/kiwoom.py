@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtWidgets import QApplication
 
 from .control import Control
-from .client import Client
+
 
 class Kiwoom:
     app = None
@@ -13,7 +13,6 @@ class Kiwoom:
         if not Kiwoom.app:
             Kiwoom.app = QApplication(sys.argv)
             Kiwoom.control = Control()
-            Kiwoom.app.exec()
 
         self.account_cnt = ""
         self.account_no_list = []
@@ -38,8 +37,9 @@ class Kiwoom:
         # self.control.set_input_value("종목코드", "185490")
         # self.control.comm_rq_data("주식기본정보", "OPT10001", 0, "0101")
         print("END DO")
-        Kiwoom.app.quit()
-        Kiwoom.app = None
+        if Kiwoom.app:
+            QApplication.quit()
+            Kiwoom.app = None
 
     def inquiry_balance(self):
         # 예수금상세현황요청
