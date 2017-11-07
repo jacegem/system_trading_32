@@ -20,12 +20,16 @@ class Control(QAxWidget):
 
         self.order_no = ""  # 주문번호
         self.inquiry = 0  # 조회
+        self.msg = ""
+        self.condition = ""
 
         self.opw00001Data = {}
         self.opw00018Data = {}
 
         self.OnEventConnect.connect(self.event_connect)
+        self.OnReceiveMsg.connect(self.receive_msg)
         self.OnReceiveTrData.connect(self.receive_tr_data)
+        self.OnReceiveConditionVer.connect(self.receive_condition_ver)
 
         # 로깅용 설정파일
         logging.config.fileConfig('logging.conf')
@@ -33,6 +37,45 @@ class Control(QAxWidget):
 
         if self.get_connect_state() == 0:
             self.comm_connect()
+
+    def receive_condition_ver(self, receive, msg):
+        """
+        getConditionLoad() 메서드의 조건식 목록 요청에 대한 응답 이벤트
+        :param receive: int - 응답결과(1: 성공, 나머지 실패)
+        :param msg: string - 메세지
+        """
+        self.log.info("<<receiveConditionVer>>")
+        self.log.debug("receive, msg : ({}, {})".format(receive, msg))
+
+        try:
+            if not receive:
+                return
+
+            self.condition = self.getConditionNameList()
+            print("조건식 개수: ", len(self.condition))
+
+            for key in self.condition.keys():
+                print("조건식: ", key, ": ", self.condition[key])
+                print("key type: ", type(key))
+
+        except Exception as e:
+            print(e)
+
+        finally:
+            self.condition_loop.exit()
+
+    def receive_msg(self, screen_no, request_name, tr_code, msg):
+        """
+        수신 메시지 이벤트
+        서버로 어떤 요청을 했을 때(로그인, 주문, 조회 등), 그 요청에 대한 처리내용을 전달해준다.
+        :param screen_no: string - 화면번호(4자리, 사용자 정의, 서버에 조회나 주문을 요청할 때 이 요청을 구별하기 위한 키값)
+        :param request_name: string - TR 요청명(사용자 정의)
+        :param tr_code: string
+        :param msg: string - 서버로 부터의 메시지
+        """
+        self.log.info("<<receiveMsg>>")
+        self.log.debug("screenNo, request_name, tr_code, msg : {}, {}, {}, {}".format(screen_no, request_name, tr_code, msg))
+        self.msg += request_name + ": " + msg + "\r\n\r\n"
 
     def comm_connect(self):
         self.dynamicCall("CommConnect()")
@@ -116,9 +159,9 @@ class Control(QAxWidget):
         if return_code != ReturnCode.OP_ERR_NONE:
             raise KiwoomProcessingError("commRqData(): " + ReturnCode.CAUSE[return_code])
 
-        # 루프 생성: receiveTrData() 메서드에서 루프를 종료시킨다.
-        self.request_loop = QEventLoop()
-        self.request_loop.exec_()
+            # 루프 생성: receiveTrData() 메서드에서 루프를 종료시킨다.
+            # self.request_loop = QEventLoop()
+            # self.request_loop.exec_()
 
     def receive_tr_data(self, screen_no, request_name, tr_code, record_name, inquiry,
                         deprecated1, deprecated2, deprecated3, deprecated4):
@@ -300,4 +343,3 @@ class Control(QAxWidget):
 
         count = self.dynamicCall("GetRepeatCnt(QString, QString)", tr_code, request_name)
         return count
-

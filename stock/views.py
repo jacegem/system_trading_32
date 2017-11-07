@@ -9,7 +9,8 @@ def index(request):
 
 
 def kiwoom(request):
-    api = Kiwoom()
-    api.do()
+    api = Kiwoom.instance()
+    # api.do()
+    api.get_run()
 
     return JsonResponse({'result': 'index'})

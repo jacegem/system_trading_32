@@ -6,3 +6,4 @@ django-celery
 redis
 pyqt5
 pyqt5-tools
+pandas
